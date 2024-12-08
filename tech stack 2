@@ -1,0 +1,141 @@
+from flask import Flask, render_template, request, redirect, url_for
+from flask_pymongo import PyMongo
+import re
+
+app = Flask(ibrahimqureshi99)
+
+app.config["MONGO_URI"] = "mongodb://localhost:27017/linksharing"
+mongo = PyMongo(app)
+@app.route('/')
+def index():
+    links = mongo.db.links.find() 
+    return render_template("index.html", links=links)
+@app.route('/add', methods=['GET', 'POST'])
+def add_link():
+    if request.method == 'POST':  
+        title = request.form['title']
+        description = request.form['description']
+        url = request.form['url']
+mongo.db.links.insert_one({
+            'title': title,
+            'description': description,
+            'url': url
+        })
+        
+        return redirect(url_for('index'))  # Go back to the homepage after adding the link
+    
+    return render_template('add_link.html')  # Show the form when the user visits /add
+
+# Route to search links
+@app.route('/search', methods=['GET'])
+def search_links():
+    query = request.args.get('query', '')  # Get the search query from the URL
+    results = mongo.db.links.find({
+        '$or': [
+            {'title': {'$regex': query, '$options': 'i'}},  # Search for matching title
+            {'description': {'$regex': query, '$options': 'i'}}  # Search for matching description
+        ]
+    })
+    return render_template("index.html", links=results)  # Show the results in the same template
+
+# Run the app
+if __name__ == "__main__":
+    app.run(debug=True)
+What this code does:
+Flask Setup: This is the basic Flask app setup. Flask helps us create the server and handle requests.
+MongoDB Setup: We use Flask-PyMongo to connect to MongoDB and store the links. The database is named linksharing.
+Home Page (/): Displays all the links stored in the MongoDB database.
+Add Link Page (/add): A form to submit new links (with title, description, and URL).
+Search Links (/search): Allows searching for links by title or description.
+3. Create HTML Templates
+Now, let's create some simple HTML templates to display the content on the website.
+
+Create a folder named templates inside the link_sharing folder.
+Inside templates, create two files: index.html and add_link.html.
+templates/index.html
+This is the homepage that will show all the links:
+
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Sharing</title>
+</head>
+<body>
+    <h1>Link Sharing Platform</h1>
+
+    <!-- Search Form -->
+    <form action="{{ url_for('search_links') }}" method="get">
+        <input type="text" name="query" placeholder="Search for a link...">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Display Links -->
+    <h2>Links:</h2>
+    <ul>
+        {% for link in links %}
+            <li>
+                <strong>{{ link['title'] }}</strong><br>
+                <p>{{ link['description'] }}</p>
+                <a href="{{ link['url'] }}" target="_blank">Visit</a>
+            </li>
+        {% else %}
+            <p>No links available. Please add some!</p>
+        {% endfor %}
+    </ul>
+
+    <!-- Link to Add New Link -->
+    <a href="{{ url_for('add_link') }}">Add a new link</a>
+</body>
+</html>
+templates/add_link.html
+This is the page where users can submit a new link:
+
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Link</title>
+</head>
+<body>
+    <h1>Add a New Link</h1>
+
+    <form action="{{ url_for('add_link') }}" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br>
+
+        <label for="url">URL:</label>
+        <input type="url" id="url" name="url" required><br>
+
+        <button type="submit">Add Link</button>
+    </form>
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
+Running the Application
+Start MongoDB: If you're using a local MongoDB instance, make sure it's running. You can start MongoDB from the terminal by running:
+
+bash
+Copy code
+mongod
+Run the Flask app: Navigate to the link_sharing folder in your terminal, and run the following command:
+
+bash
+Copy code
+python app.py
+This will start the Flask server. You can access the website by opening a web browser and visiting http://127.0.0.1:5000/.
+
+What You’ve Built So Far:
+A simple website where you can add and view links.
+A search feature that lets you search for links by title or description.
+MongoDB is used to store the links, and the data is dynamically retrieved and displayed.
