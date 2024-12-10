@@ -22,39 +22,22 @@ mongo.db.links.insert_one({
             'url': url
         })
         
-        return redirect(url_for('index'))  # Go back to the homepage after adding the link
+        return redirect(url_for('index'))  
     
-    return render_template('add_link.html')  # Show the form when the user visits /add
+    return render_template('add_link.html') 
 
 # Route to search links
 @app.route('/search', methods=['GET'])
 def search_links():
     query = request.args.get('query', '')  # Get the search query from the URL
-    results = mongo.db.links.find({
-        '$or': [
-            {'title': {'$regex': query, '$options': 'i'}},  # Search for matching title
-            {'description': {'$regex': query, '$options': 'i'}}  # Search for matching description
-        ]
+    results = mongo.db.links.find({  ]
     })
     return render_template("index.html", links=results)  # Show the results in the same template
 
-# Run the app
 if __name__ == "__main__":
     app.run(debug=True)
-What this code does:
-Flask Setup: This is the basic Flask app setup. Flask helps us create the server and handle requests.
-MongoDB Setup: We use Flask-PyMongo to connect to MongoDB and store the links. The database is named linksharing.
-Home Page (/): Displays all the links stored in the MongoDB database.
-Add Link Page (/add): A form to submit new links (with title, description, and URL).
-Search Links (/search): Allows searching for links by title or description.
 3. Create HTML Templates
 Now, let's create some simple HTML templates to display the content on the website.
-
-Create a folder named templates inside the link_sharing folder.
-Inside templates, create two files: index.html and add_link.html.
-templates/index.html
-This is the homepage that will show all the links:
-
 html
 Copy code
 <!DOCTYPE html>
@@ -123,17 +106,6 @@ Copy code
 </body>
 </html>
 Running the Application
-Start MongoDB: If you're using a local MongoDB instance, make sure it's running. You can start MongoDB from the terminal by running:
-
-bash
-Copy code
-mongod
-Run the Flask app: Navigate to the link_sharing folder in your terminal, and run the following command:
-
-bash
-Copy code
-python app.py
-This will start the Flask server. You can access the website by opening a web browser and visiting http://127.0.0.1:5000/.
 
 What You’ve Built So Far:
 A simple website where you can add and view links.
