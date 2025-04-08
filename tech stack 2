@@ -27,69 +27,6 @@ Core Features
 4. Search and Filter: I’ll implement a simple search feature that lets users search for resources by keywords and filter by categories (e.g., AI tools, tutorials).
 Here are simplified installation instructions with code steps for setting up the project:
 
-Installation Instructions
-
-1. Clone the Repository 
-   Clone the project repository to local machine:
-   bash
-   git clone https://github.com/ibbyibs88/resource-platform.git
-   cd resource-platform
-   
-
-2. Backend Setup
-
-   - Install Node.js 
-Install Backend Dependencies
-    bash
-     npm init -y
-     npm install express body jsonwebtoken mysql2
-
-   - Start the Backend Server  
-     Run the following command to start the backend server:
-    bash
-     node server.js
-     
-3. Frontend Setup
-
-   - Install React.js  
-     In a separate terminal, navigate to your frontend folder:
-     bash
-     npx create-react-app frontend
-     cd frontend
-     
-
-   - Install Frontend Dependencies  
-     Inside the frontend folder, install necessary libraries:
-     bash
-     npm install axios react-router-dom bootstrap
-     
-
-   - Start the Frontend  
-     Run this to start the frontend:
-     bash
-     npm start
-     
-
-4. Database Setup
-
-   - Create MySQL Database  
-     Use MySQL Workbench or any database tool to create the database, and then create tables for users and resources.
-   
-   - Connect to the Database
-     Update the database connection details in the backend (`server.js` or a config file).
-
-5. Run the Application
-
-   - Ensure both the backend and frontend servers are running in separate terminals.
-     - Backend: `node server.js`
-     - Frontend: `npm start`
-
-   Your application should now be accessible locally at `http://localhost:3000` for the frontend and `http://localhost:5000` for the backend (or your specified ports).
-
-
-4. Database Setup:
-   - I’ll set up a MySQL database and create tables for users, profiles, and resources.
-
 Project Plan
 
 Phase 1: Backend Setup (Week 1-2)
@@ -114,7 +51,7 @@ Legal and Ethical Considerations
 
 Risk Assessment
 
-- Security: I’ll ensure that user data is encrypted, passwords are hashed using bcryptjs, and tokens are securely handled with **JWT** to prevent unauthorized access.
+- Security: I’ll ensure that user data is encrypted, passwords are hashed using bcryptjs, and tokens are securely handled with JWTto prevent unauthorized access.
 - Scalability: As the platform grows, I may need to optimize the database and consider using additional tools to handle more users and resources efficiently.
 
 Real-World Application
@@ -135,3 +72,133 @@ The README file will include:
 - Installation instructions.
 - The technologies used.
 - A link to the GitHub repository for version control.
+
+code: 
+
+1. Create a folder- link-sharing-app
+2. Inside it, create the following files:
+   - `server.js`
+   - a folder called `public` with:
+     - `index.html`
+     - `style.css`
+     - `script.js`
+3. Run it using Node.js 
+js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
+app.get('/links', (req, res) => {
+  res.json(links);
+});
+
+app.post('/links', (req, res) => {
+  const { title, description, url } = req.body;
+  if (title && description && url) {
+    links.push({ title, description, url });
+    res.status(201).json({ message: 'Link added successfully!' });
+  } else {
+    res.status(400).json({ message: 'Please fill in all fields.' });
+
+app.get('/links/search', (req, res) => {
+  const query = req.query.q?.toLowerCase() || '';
+  const results = links.filter(link =>
+    link.title.toLowerCase().includes(query) ||
+    link.description.toLowerCase().includes(query)
+  res.json(results);
+
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Link Sharing Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <form id="linkForm">
+      <input type="text" id="title" placeholder="Title" 
+      <input type="text" id="description" placeholder="Description" 
+      <input type="url" id="url" placeholder="URL (https://...)" 
+      <button type="submit">Add Link</button>
+    </form>
+
+    <input type="text" id="search" placeholder="Search for a link...">
+
+    <ul id="linksList"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+
+
+form input, form button, #search {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+
+  list-style: none;
+  padding: 0;
+
+li {
+  padding: 10px;
+  margin: 10px 0;
+  background: #e9ecef;
+  border-radius: 5px;
+}
+
+a {
+  text-decoration: none;
+  color: #007bff;
+
+const form = document.getElementById('linkForm');
+const linksList = document.getElementById('linksList');
+const searchInput = document.getElementById('search');
+  if (res.ok) {
+    form.reset();
+    fetchLinks();
+  } else {
+    alert('Failed to add link. Make sure all fields are filled.');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value;
+  fetch(`/links/search?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(renderLinks)
+
+function fetchLinks() {
+  fetch('/links')
+    .then(res => res.json())
+    .then(renderLinks);
+
+2. Initialize your project in the terminal:
+```bash
+npm init -y
+npm install express
+```
+
+3. Start your server:
+```bash
+node server.js
+```
+
+4. Open browser and go to:  
+`http://localhost:3000`
