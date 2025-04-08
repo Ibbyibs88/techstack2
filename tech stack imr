@@ -94,7 +94,7 @@ Week 3: Testing and Improving
 - Fix any bugs or issues that come up during testing.
 
  Week 4: Preparing for Growth
-- Plan how to **integrate a real database** like MongoDB.
+- Plan how to integrate a real database like MongoDB.
 - Think about adding features like:
   - User accounts for managing links.
   - Upvoting/downvoting links to highlight popular ones.
@@ -113,7 +113,7 @@ Before I finish the first version, I’ll thoroughly test everything:
 
 Once I have a working prototype, I’ll focus on scaling the platform. Here’s how I can grow the project:
 
-1. Database Integration*: 
+1. Database Integration: 
    - I’ll switch from mock data to a real database like MongoDB to store links and user data permanently.
    
 2. User Accounts: 
